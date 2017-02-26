@@ -1,10 +1,15 @@
 {
     "url": "http://localhost:2368",
     "database": {
+        "client": "sqlite3",
         "connection": {
             "filename": "content/data/ghost-dev.db"
         },
         "debug": false
+    },
+    "auth": {
+        "type": "ghost",
+        "url": "http://devauth.ghost.org:8080"
     },
     "paths": {
         "contentPath": "content/"

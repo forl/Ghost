@@ -9,9 +9,9 @@ var debug = require('debug')('ghost:admin'),
     // Global/shared middleware?
     cacheControl = require('../middleware/cache-control'),
     urlRedirects = require('../middleware/url-redirects'),
-    errorHandler = require('../middleware//error-handler'),
+    errorHandler = require('../middleware/error-handler'),
     maintenance = require('../middleware/maintenance'),
-    prettyURLs = require('../middleware//pretty-urls'),
+    prettyURLs = require('../middleware/pretty-urls'),
     serveStatic = require('express').static,
     utils = require('../utils');
 
@@ -40,6 +40,9 @@ module.exports = function setupAdminApp() {
         config.get('paths').clientAssets,
         {maxAge: utils.ONE_YEAR_MS, fallthrough: false}
     ));
+
+    // Service Worker for offline support
+    adminApp.get(/^\/(sw.js|sw-registration.js)$/, require('./serviceworker'));
 
     // Render error page in case of maintenance
     adminApp.use(maintenance);

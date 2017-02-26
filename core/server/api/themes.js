@@ -13,6 +13,7 @@ var Promise = require('bluebird'),
     apiUtils = require('./utils'),
     utils = require('./../utils'),
     i18n = require('../i18n'),
+    themeUtils = require('../themes'),
     themes;
 
 /**
@@ -26,6 +27,10 @@ themes = {
             .then(function (result) {
                 config.set('paths:availableThemes', result);
             });
+    },
+
+    browse: function browse() {
+        return Promise.resolve({themes: settings.cache.get('availableThemes')});
     },
 
     upload: function upload(options) {
@@ -84,7 +89,7 @@ themes = {
                 // force reload of availableThemes
                 // right now the logic is in the ConfigManager
                 // if we create a theme collection, we don't have to read them from disk
-                return themes.loadThemes();
+                return themeUtils.load();
             })
             .then(function () {
                 // the settings endpoint is used to fetch the availableThemes
@@ -159,7 +164,7 @@ themes = {
                 return storageAdapter.delete(name, config.getContentPath('themes'));
             })
             .then(function () {
-                return themes.loadThemes();
+                return themeUtils.load();
             })
             .then(function () {
                 return settings.updateSettingsCache();
